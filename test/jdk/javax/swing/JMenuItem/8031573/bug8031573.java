@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2016, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -20,11 +20,11 @@
  * or visit www.oracle.com if you need additional information or have any
  * questions.
  */
-import java.awt.FlowLayout;
-import javax.swing.JApplet;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
+import javax.swing.JCheckBoxMenuItem;  
+import javax.swing.JFrame;  
+import javax.swing.JMenu;  
+import javax.swing.JMenuBar;  
+import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -33,32 +33,40 @@ import javax.swing.UIManager;
  * @summary [macosx] Checkmarks of JCheckBoxMenuItems aren't rendered
  *           in high resolution on Retina
  * @author Alexander Scherbatiy
- * @run applet/manual=yesno bug8031573.html
+ * @run main bug8031573
  */
-public class bug8031573 extends JApplet {
-
-    @Override
-    public void init() {
+ 
+public class bug8031573 {
+    private JFrame frame;
+    private JMenuBar bar;
+    private JMenu menu;
+    private JCheckBoxMenuItem checkBoxMenuItem;
+    
+    public static void main(String args[]) {
+        bug8031573 test = new bug8031573();
+        test.createGUI();
+    }
+    private void createGUI () {
         try {
-
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-
             SwingUtilities.invokeAndWait(new Runnable() {
-
                 @Override
                 public void run() {
-                    JMenuBar bar = new JMenuBar();
-                    JMenu menu = new JMenu("Menu");
-                    JCheckBoxMenuItem checkBoxMenuItem
-                            = new JCheckBoxMenuItem("JCheckBoxMenuItem");
+                    frame = new JFrame("bug8031573");
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    bar = new JMenuBar();
+                    menu = new JMenu("Menu");
+                    checkBoxMenuItem = new JCheckBoxMenuItem("JCheckBoxMenuItem");
                     checkBoxMenuItem.setSelected(true);
                     menu.add(checkBoxMenuItem);
                     bar.add(menu);
-                    setJMenuBar(bar);
+                    frame.setJMenuBar(bar);
+                    frame.setSize(350, 250);
+                    frame.setVisible(true);
                 }
             });
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e);    
         }
     }
 }
